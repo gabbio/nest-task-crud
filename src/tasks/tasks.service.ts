@@ -10,4 +10,8 @@ export class TaskService {
   async create(taskDto: CreateTaskDto): Promise<Task> {
     return await this.taskModel.create(taskDto);
   }
+
+  async getAll(): Promise<Task[]> {
+    return await this.taskModel.findAll();
+  }
 }
