@@ -8,6 +8,7 @@ import {
   ParseIntPipe,
   HttpException,
   HttpStatus,
+  Delete,
 } from '@nestjs/common';
 import { CreateTaskDto } from './create-task.dto';
 import { TaskService } from './tasks.service';
