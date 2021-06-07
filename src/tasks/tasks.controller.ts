@@ -1,4 +1,14 @@
-import { Controller, Post, Body, Get } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Put,
+  Param,
+  ParseIntPipe,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
 import { CreateTaskDto } from './create-task.dto';
 import { TaskService } from './tasks.service';
 
@@ -14,5 +24,25 @@ export class TasksController {
   @Get()
   async getAll() {
     return await this.taskService.getAll();
+  }
+
+  @Put(':id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() createTaskDto: CreateTaskDto,
+  ) {
+    const [numberOfUpdatedTasks, [updatedTask]] = await this.taskService.update(
+      id,
+      createTaskDto,
+    );
+
+    if (numberOfUpdatedTasks < 1) {
+      throw new HttpException(
+        { status: HttpStatus.NOT_FOUND, error: 'Task not found' },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    return updatedTask;
   }
 }

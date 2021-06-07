@@ -14,4 +14,13 @@ export class TaskService {
   async getAll(): Promise<Task[]> {
     return await this.taskModel.findAll();
   }
+
+  async update(id: number, task: CreateTaskDto) {
+    console.log(`id: ${id}`);
+    return await this.taskModel.update(task, {
+      fields: ['name'],
+      where: { id },
+      returning: true,
+    });
+  }
 }
