@@ -23,4 +23,8 @@ export class TaskService {
       returning: true,
     });
   }
+
+  async delete(id: number) {
+    return await this.taskModel.destroy({ where: { id } });
+  }
 }
