@@ -47,17 +47,24 @@ export class TasksController {
     return updatedTask;
   }
 
-  @Delete(':id')
-  async delete(@Param('id', ParseIntPipe) id: number) {
-    const numberOfdestroyedTasks = await this.taskService.delete(id);
+  @Delete()
+  async delete(@Query('ids') id: string) {
+    const ids = id
+      .split(',')
+      .map((taskId) => parseInt(taskId))
+      .filter((taskId) => taskId > 0);
+    const numberOfdestroyedTasks = await this.taskService.delete(ids);
 
     if (numberOfdestroyedTasks < 1) {
       throw new HttpException(
-        { status: HttpStatus.NOT_FOUND, error: 'Task not found' },
+        { status: HttpStatus.NOT_FOUND, error: 'No task found' },
         HttpStatus.NOT_FOUND,
       );
     }
 
-    return 'Task successfully deleted';
+    if (numberOfdestroyedTasks === ids.length)
+      return 'Tasks successfully deleted';
+
+    return `Only ${numberOfdestroyedTasks} task(s) deleted`;
   }
 }
